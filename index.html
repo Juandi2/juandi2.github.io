@@ -478,7 +478,7 @@ footer span{color:var(--red);}
       Juan Diego<br>Duque-Salazar
     </div>
     <div class="splash-sub">Researcher &nbsp;·&nbsp; Peace and Conflict Research &nbsp;·&nbsp; Uppsala University</div>
-    <button class="splash-enter" onclick="enterSite()">
+    <button type="button" class="splash-enter" onclick="enterSite()">
       <i class="ti ti-arrow-right"></i> Enter
     </button>
   </div>
@@ -856,6 +856,7 @@ footer span{color:var(--red);}
 function enterSite() {
   const splash = document.getElementById('splash');
   const app = document.getElementById('app');
+  if (!splash || !app) return;
   splash.classList.add('hide');
   setTimeout(() => {
     splash.classList.add('gone');
