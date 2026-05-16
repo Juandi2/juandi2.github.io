@@ -462,6 +462,80 @@ footer span{color:var(--red);}
   .hero-name{font-size:34px;}
   .research-themes{grid-template-columns:1fr;}
 }
+/* ─── PHOTO GRID ─── */
+.photo-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+.photo-frame{position:relative;overflow:hidden;cursor:pointer;}
+.photo-frame img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.5s ease;}
+.photo-frame:hover img{transform:scale(1.04);}
+.photo-zoom-icon{
+  position:absolute;top:10px;right:10px;
+  width:30px;height:30px;
+  background:rgba(0,0,0,0.45);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:14px;
+  opacity:0;transition:opacity 0.2s;
+}
+.photo-frame:hover .photo-zoom-icon{opacity:1;}
+
+/* ─── LIGHTBOX ─── */
+#lightbox{
+  display:none;
+  position:fixed;inset:0;z-index:2000;
+  background:rgba(10,10,8,0.96);
+  align-items:center;justify-content:center;
+  flex-direction:column;
+}
+#lightbox.open{display:flex;}
+.lb-content{
+  display:flex;flex-direction:column;align-items:center;
+  max-width:90vw;max-height:90vh;
+}
+#lb-img{
+  max-width:90vw;max-height:78vh;
+  object-fit:contain;
+  box-shadow:0 20px 60px rgba(0,0,0,0.6);
+  transition:opacity 0.25s ease;
+}
+#lb-caption{
+  margin-top:14px;
+  font-size:12px;color:rgba(255,255,255,0.7);
+  font-family:var(--sans);letter-spacing:0.03em;
+  text-align:center;max-width:600px;
+}
+#lb-counter{
+  margin-top:6px;font-size:11px;color:rgba(255,255,255,0.35);
+  font-family:var(--sans);letter-spacing:0.08em;
+}
+.lb-close,.lb-prev,.lb-next{
+  position:fixed;
+  background:none;border:none;color:#fff;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:color 0.2s, background 0.2s;
+}
+.lb-close{
+  top:1.25rem;right:1.5rem;
+  font-size:22px;width:40px;height:40px;
+  border-radius:50%;
+}
+.lb-close:hover{background:rgba(255,255,255,0.1);}
+.lb-prev,.lb-next{
+  top:50%;transform:translateY(-50%);
+  font-size:28px;width:52px;height:52px;
+  border-radius:50%;
+}
+.lb-prev{left:1.5rem;}
+.lb-next{right:1.5rem;}
+.lb-prev:hover,.lb-next:hover{background:rgba(255,255,255,0.1);}
+@media(max-width:600px){
+  .photo-grid{grid-template-columns:1fr 1fr;}
+  .lb-prev{left:0.5rem;}
+  .lb-next{right:0.5rem;}
+}
 </style>
 </head>
 <body>
@@ -505,6 +579,7 @@ footer span{color:var(--red);}
       <button class="nav-btn" data-page="teach">Teaching</button>
       <button class="nav-btn" data-page="cv">CV</button>
       <button class="nav-btn" data-page="out">Outreach</button>
+      <button class="nav-btn" data-page="photo">Field Photography</button>
       <button class="nav-btn" data-page="contact">Contact</button>
     </nav>
     <div class="masthead-actions">
@@ -738,7 +813,7 @@ footer span{color:var(--red);}
     <div class="page" id="page-out">
       <div class="page-header">
         <div class="page-header-accent"></div>
-        <div class="page-header-text"><h2>Media &amp; Outreach</h2><p>Op-eds, invited talks, civil society collaboration &amp; field photography</p></div>
+        <div class="page-header-text"><h2>Media &amp; Outreach</h2><p>Op-eds, invited talks &amp; civil society collaboration</p></div>
       </div>
       <div class="page-body">
         <div class="out-grid">
@@ -769,54 +844,66 @@ footer span{color:var(--red);}
             <div class="talk-item"><span class="talk-year">2012–2016</span><span class="talk-text">Colombia — workshops in Cauca, Nariño, Cesar, Valle del Cauca &amp; Meta</span></div>
           </div>
         </div>
+      </div>
+    </div>
 
-        <!-- PHOTO ESSAY — integrated, editorial layout -->
-        <div class="photo-essay">
-          <div class="photo-essay-title">Field Photography</div>
-          <div class="photo-essay-sub">Colombia · Elections 2022–2023 · All photographs taken during fieldwork</div>
-
-          <div class="photo-row-1">
-            <div class="photo-frame h-280">
-              <img src="Print_3-5136.jpg" alt="Large political rally, Colombia 2023">
-              <div class="photo-caption">Electoral rally, Colombia 2023 — thousands gathered ahead of local elections</div>
-            </div>
-            <div class="photo-frame h-280">
-              <img src="Print_3-5136.jpg" alt="Women at political rally">
-              <div class="photo-caption">Women in politics — party supporters at a campaign event</div>
-            </div>
-            <div class="photo-frame h-280">
-              <img src="Print_3-5136.jpg" alt="Alianza Verde campaign rally">
-              <div class="photo-caption">Alianza Verde candidate supporter, Caquetá 2023</div>
-            </div>
+    <!-- ── FIELD PHOTOGRAPHY PAGE ── -->
+    <div class="page" id="page-photo">
+      <div class="page-header">
+        <div class="page-header-accent"></div>
+        <div class="page-header-text"><h2>Field Photography</h2><p>Colombia · Elections 2022–2023 · All photographs taken during fieldwork</p></div>
+      </div>
+      <div class="page-body">
+        <div class="photo-grid">
+          <div class="photo-frame h-280" onclick="openLightbox(0)">
+            <img src="Print_3-5136.jpg" alt="Electoral rally, Colombia 2023">
+            <div class="photo-caption">Electoral rally, Colombia 2023 — thousands gathered ahead of local elections</div>
+            <div class="photo-zoom-icon"><i class="ti ti-zoom-in"></i></div>
           </div>
-
-          <div class="photo-row-2">
-            <div class="photo-frame h-200">
-              <img src="Print_3-5136.jpg" alt="Voting station, Caquetá">
-              <div class="photo-caption">Voting station inside a basketball court, Caquetá 2023</div>
-            </div>
-            <div class="photo-frame h-200">
-              <img src="Print_3-5136.jpg" alt="Campaign clientelism — food distribution">
-              <div class="photo-caption">Campaign food distribution — documenting clientelistic practices</div>
-            </div>
+          <div class="photo-frame h-280" onclick="openLightbox(1)">
+            <img src="Print_3-5136.jpg" alt="Women at political rally">
+            <div class="photo-caption">Women in politics — party supporters at a campaign event</div>
+            <div class="photo-zoom-icon"><i class="ti ti-zoom-in"></i></div>
           </div>
-
-          <div class="photo-row-3">
-            <div class="photo-frame h-240">
-              <img src="Print_3-5136.jpg" alt="Campaign posters on a wooden fence">
-              <div class="photo-caption">Campaign posters, rural Caquetá — candidates compete for visibility in remote areas</div>
-            </div>
-            <div class="photo-frame h-240">
-              <img src="Print_3-5136.jpg" alt="Children at a political parade">
-              <div class="photo-caption">Children mobilized at a political parade — documenting how campaigns shape public space</div>
-            </div>
-            <div class="photo-frame h-240" style="display:none;"><!-- ballots reserved --></div>
+          <div class="photo-frame h-280" onclick="openLightbox(2)">
+            <img src="Print_3-5136.jpg" alt="Alianza Verde campaign rally">
+            <div class="photo-caption">Alianza Verde candidate supporter, Caquetá 2023</div>
+            <div class="photo-zoom-icon"><i class="ti ti-zoom-in"></i></div>
           </div>
-
-          <p style="font-size:10.5px;color:var(--faint);margin-top:10px;font-style:italic;">
-            Photography by Juan Diego Duque-Salazar · Field research Colombia 2022–2023
-          </p>
+          <div class="photo-frame h-280" onclick="openLightbox(3)">
+            <img src="Print_3-5136.jpg" alt="Voting station, Caquetá">
+            <div class="photo-caption">Voting station inside a basketball court, Caquetá 2023</div>
+            <div class="photo-zoom-icon"><i class="ti ti-zoom-in"></i></div>
+          </div>
+          <div class="photo-frame h-280" onclick="openLightbox(4)">
+            <img src="Print_3-5136.jpg" alt="Campaign clientelism — food distribution">
+            <div class="photo-caption">Campaign food distribution — documenting clientelistic practices</div>
+            <div class="photo-zoom-icon"><i class="ti ti-zoom-in"></i></div>
+          </div>
+          <div class="photo-frame h-280" onclick="openLightbox(5)">
+            <img src="Print_3-5136.jpg" alt="Campaign posters on a wooden fence">
+            <div class="photo-caption">Campaign posters, rural Caquetá — candidates compete for visibility in remote areas</div>
+            <div class="photo-zoom-icon"><i class="ti ti-zoom-in"></i></div>
+          </div>
+          <div class="photo-frame h-280" onclick="openLightbox(6)">
+            <img src="Photo_ethnography_1-8947.jpg" alt="Children at a political parade">
+            <div class="photo-caption">Children mobilized at a political parade — documenting how campaigns shape public space</div>
+            <div class="photo-zoom-icon"><i class="ti ti-zoom-in"></i></div>
+          </div>
         </div>
+        <p style="font-size:10.5px;color:var(--faint);margin-top:1.5rem;font-style:italic;">Photography by Juan Diego Duque-Salazar · Field research Colombia 2022–2023</p>
+      </div>
+    </div>
+
+    <!-- LIGHTBOX -->
+    <div id="lightbox" onclick="closeLightbox()">
+      <button class="lb-close" onclick="closeLightbox()"><i class="ti ti-x"></i></button>
+      <button class="lb-prev" onclick="event.stopPropagation(); shiftPhoto(-1)"><i class="ti ti-chevron-left"></i></button>
+      <button class="lb-next" onclick="event.stopPropagation(); shiftPhoto(1)"><i class="ti ti-chevron-right"></i></button>
+      <div class="lb-content" onclick="event.stopPropagation()">
+        <img id="lb-img" src="" alt="">
+        <div id="lb-caption"></div>
+        <div id="lb-counter"></div>
       </div>
     </div>
 
@@ -884,6 +971,50 @@ btns.forEach(btn => {
     btn.classList.add('active');
     current = target;
   });
+});
+
+// ── LIGHTBOX ──
+const photos = Array.from(document.querySelectorAll('#page-photo .photo-frame'));
+let currentPhoto = 0;
+
+function openLightbox(index) {
+  currentPhoto = index;
+  showPhoto();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function shiftPhoto(dir) {
+  currentPhoto = (currentPhoto + dir + photos.length) % photos.length;
+  showPhoto();
+}
+
+function showPhoto() {
+  const frame = photos[currentPhoto];
+  const img = frame.querySelector('img');
+  const caption = frame.querySelector('.photo-caption');
+  const lbImg = document.getElementById('lb-img');
+  lbImg.style.opacity = '0';
+  setTimeout(() => {
+    lbImg.src = img.src;
+    lbImg.alt = img.alt;
+    document.getElementById('lb-caption').textContent = caption ? caption.textContent : '';
+    document.getElementById('lb-counter').textContent = (currentPhoto + 1) + ' / ' + photos.length;
+    lbImg.style.opacity = '1';
+  }, 150);
+}
+
+document.addEventListener('keydown', e => {
+  const lb = document.getElementById('lightbox');
+  if (!lb.classList.contains('open')) return;
+  if (e.key === 'ArrowRight') shiftPhoto(1);
+  if (e.key === 'ArrowLeft') shiftPhoto(-1);
+  if (e.key === 'Escape') closeLightbox();
 });
 </script>
 
